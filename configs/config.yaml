@@ -1,0 +1,27 @@
+max_generations: 3
+similarity_weight: 0.8
+length_weight: 0.2
+max_no_improve: 2
+leakage_similarity_threshold: 0.45
+leakage_ngram_size: 3
+leakage_ngram_overlap_threshold: 0.1
+min_prompt_tokens: 2
+max_prompt_tokens: 200
+max_prompt_increase_ratio: 2.0
+max_prompt_increase_tokens: 40
+min_improvement_attempts: 2
+llm_execution:
+  mode: lmstudio
+  model: mistralai/ministral-3-3b
+  api_url: http://127.0.0.1:1234
+  timeout_seconds: 30
+llm_improvement:
+  mode: lmstudio
+  model: mistralai/ministral-3-3b
+  api_url: http://127.0.0.1:1234
+  timeout_seconds: 30
+llm_evaluation:
+  mode: lmstudio
+  model: mistralai/ministral-3-3b
+  api_url: http://127.0.0.1:1234
+  timeout_seconds: 30

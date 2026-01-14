@@ -1,0 +1,42 @@
+id,text,tokens
+text_001,"Prompt Evolver helps teams refine prompts while keeping outputs stable. It compares model results against expected answers and prefers shorter prompts when quality is unchanged. The process runs in small iterations with guardrails to avoid infinite loops. It also tracks token usage so teams can monitor cost. Analysts can review before and after prompts to understand improvements, and the tool records evaluation scores for each task. It is designed to work with local or API models so experiments stay flexible and repeatable.",89
+text_002,"Customer record: Alice Nguyen is an active subscriber on the basic plan. Her account started in March and has no payment issues. Support notes show she requested two billing receipts and confirmed her address. She last logged in yesterday from a mobile device in Seattle. There are no flags on the account, and she accepted the updated privacy policy. If you need status fields, mark her as active and verified. Use JSON output for extraction requests and do not include extra commentary.",92
+text_003,"The draft is understandable but wordy. It repeats the same idea about speed multiple times and mixes technical details with marketing phrases. Readers may get confused because sentences jump between performance claims and unrelated product history. The paragraph structure is uneven, with some lines too long for quick scanning. It should be tightened into a clear statement about speed and reliability, remove repetition, and keep the tone neutral. The pacing should be smoother, and the key benefit should appear in the first line for clarity.",95
+text_004,"Product A costs $10, includes a two year warranty, and is rated for light use. Product B costs $15, includes a four year warranty, and is rated for heavy use. A is lighter and easier to carry, while B is heavier but lasts longer. Both have the same color options and ship in two days. A includes a basic carrying case, while B ships with a reinforced case. The main differences for buyers are price, durability, and intended usage. Highlight three clear differences without mentioning similarities.",103
+text_005,"The user asked for a password reset and provided an email address for account recovery. There is no request for sensitive data beyond the reset process, and no attempts to bypass security. The request appears legitimate and follows standard support steps. The message contains no harmful content, threats, or policy violations. The user did not request policy exceptions or bypass identity checks. They only want normal reset instructions. Provide only a compliance judgment and do not add extra guidance. The correct outcome should be a simple pass or fail response.",101
+text_006,"In Q2 the company reported revenue of $1.2M with 45k active users. Churn was 3.5% and net retention improved slightly. The quarterly update mentions growth in enterprise deals and steady margin, but those details are not required. The CFO noted that pipeline health was stable and forecast confidence increased. Gross margin held at 62% and operating costs were flat, but those figures are not required. Investors asked about churn drivers, but no new data was shared. Extract only the requested metrics and return them as JSON fields without additional commentary.",107
+text_007,"A recent study suggests the drug lowers blood pressure in adults after eight weeks. Researchers noted improved readings for most participants, but some reported nausea and dizziness. The sample size was modest and the follow up period was short, so conclusions are limited. Investigators also observed higher adherence when reminders were used. Further research is needed to confirm long term safety and effectiveness across different age groups and conditions. Summarize two takeaways and propose one open question grounded in the study details.",90
+text_008,"Planned rollout: deploy a feature flag, run smoke tests, and then enable the feature for 10% of users. Monitor error rates and performance metrics before expanding. If issues appear, roll back quickly and notify stakeholders. Schedule the rollout during low traffic hours and document each step. Teams should log the rollout, confirm alerts are active, and communicate progress in the status channel. Keep the steps concise and operational, reflecting the sequence described. Provide clear numbered actions without adding extra analysis or optional steps.",98
+text_009,"Weekly sync notes (Project Atlas):
+- Decision: launch beta on 2026-03-15.
+- TODO: Marta to draft the beta announcement email by 2026-02-01 (high priority).
+- Action: Ken to add SSO support; due 2026-02-20; priority medium.
+- Follow-up: someone should confirm legal terms with counsel (no deadline mentioned, low priority).
+- FYI: the onboarding doc is in Confluence.",91
+text_010,"Hi Support,
+My name is Jordan Lee. You can reach me at jordan.lee+test@example.com or +49 151 2345 6789.
+Please update the shipping address to Sonnenallee 17, 12045 Berlin.
+My account number is ACCT-0049127. Thanks!",52
+text_011,"Security policy draft:
+1) Employees must change their password every 90 days.
+2) Employees are not required to change their password on any schedule.
+3) Two-factor authentication is mandatory for all admin accounts.",42
+text_012,"Schema:
+customers(id, name)
+orders(id, customer_id, order_date, total_amount)
+Question:
+List each customer name and their most recent order_date. If a customer has no orders, still include them with NULL as most recent order_date.",47
+text_013,"I’ve been using the app for a week. Setup was straightforward, but the sync keeps failing and it’s wasting my time. Please fix this soon.",33
+text_014,"Invoice:
+- Notebook: 3 x 4.50
+- Pen set: 2 x 6.25
+Shipping: 3.99
+Tax rate: 19%",29
+text_015,"Release notes timeline (messy):
+On 2026-01-05 we opened internal alpha. The bug bash happened on 2026-01-20.
+Marketing planned the press briefing for 2026-02-03, and GA is scheduled for 2026-03-01.",52
+text_016,"Requirements for the mobile banking app:
+- Persona: customer
+- Must be able to view current balance and last 10 transactions.
+- Must be able to freeze/unfreeze a card quickly if it is lost.
+- Must receive a push notification for transactions over 200 EUR to spot fraud.",55

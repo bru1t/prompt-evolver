@@ -1,0 +1,48 @@
+id,id_text,id_prompt,task_type,expected_output,format_requirements
+task_001,text_001,prompt_001,Writing,"* Helps teams refine prompts while keeping outputs consistent by comparing model results to expected answers, and prefers shorter prompts when quality stays the same.
+* Improves prompts in small, guarded iterations to prevent infinite loops, while tracking token usage so teams can monitor cost.
+* Records before/after prompts and evaluation scores for each task, and works with both local and API-based models to keep experiments flexible and repeatable.",3 bullet points
+task_002,text_002,prompt_002,Extraction,"{""name"": ""Alice Nguyen"", ""status"": ""active""}",JSON with required keys
+task_003,text_003,prompt_003,Editing,"The draft is clear but too wordy. It repeats the point about speed and mixes technical details with marketing language, which can confuse readers. Reorganize it into a short, neutral statement focused on speed and reliability, cut repetition, smooth the pacing, and put the main benefit in the first line.",Single concise paragraph
+task_004,text_004,prompt_004,Comparison,"1) Price: Product A costs $10, while Product B costs $15.
+2) Warranty length: Product A includes a two-year warranty; Product B includes a four-year warranty.
+3) Use rating: Product A is rated for light use, whereas Product B is rated for heavy use.",Numbered list of 3 differences
+task_005,text_005,prompt_005,Evaluation,pass,Return only pass or fail
+task_006,text_006,prompt_006,Extraction,"{""revenue"": ""$1.2M"", ""users"": ""45k"", ""churn"": ""3.5%""}",JSON with required keys
+task_007,text_007,prompt_007,Research,"Takeaways:  
+
+* The drug was associated with lower blood pressure in adults after eight weeks, with most participants showing improved readings.
+* Side effects were reported (notably nausea and dizziness), and the modest sample size plus short follow-up limit how confident we can be in the conclusions.
+
+Open question:
+
+* Do the blood-pressure benefits persist—and are side effects acceptable—over the long term in larger, more diverse populations (different ages and health conditions)?",2 takeaways + 1 open question
+task_008,text_008,prompt_008,Ops,"1. Deploy the feature behind a feature flag.
+2. Run smoke tests.
+3. Schedule the rollout during low-traffic hours.
+4. Confirm alerts are active.
+5. Enable the feature for 10% of users.
+6. Monitor error rates and performance metrics.
+7. Expand rollout based on monitoring results.
+8. If issues appear, roll back quickly.
+9. Notify stakeholders.
+10. Log the rollout, document each step, and communicate progress in the status channel.",Numbered steps
+task_009,text_009,prompt_009,Planning,"[{""action"":""Draft the beta announcement email"",""owner"":""Marta"",""due_date"":""2026-02-01"",""priority"":""high""},{""action"":""Add SSO support"",""owner"":""Ken"",""due_date"":""2026-02-20"",""priority"":""medium""},{""action"":""Confirm legal terms with counsel"",""owner"":null,""due_date"":null,""priority"":""low""}]",JSON array with required keys; JSON only
+task_010,text_010,prompt_010,Redaction,"Hi Support,
+My name is [REDACTED_NAME]. You can reach me at [REDACTED_EMAIL] or [REDACTED_PHONE].
+Please update the shipping address to [REDACTED_ADDRESS].
+My account number is [REDACTED_ACCOUNT]. Thanks!",Preserve text; only replace PII placeholders
+task_011,text_011,prompt_011,Consistency,"{""overall"":""contradictory"",""contradictions"":[{""sentence_a"":""Employees must change their password every 90 days."",""sentence_b"":""Employees are not required to change their password on any schedule.""}]}",JSON with exact conflicting sentences
+task_012,text_012,prompt_012,SQL,"SELECT c.name, MAX(o.order_date) AS most_recent_order_date
+FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.id
+GROUP BY c.name;",SQL only; single query
+task_013,text_013,prompt_013,Classification,"{""sentiment"":""negative"",""evidence"":[""the sync keeps failing"",""it’s wasting my time""]}",JSON only; evidence quotes from text
+task_014,text_014,prompt_014,Math,"{""subtotal"":26.00,""tax"":5.70,""shipping"":3.99,""total"":35.69}",JSON only; 2 decimals
+task_015,text_015,prompt_015,Extraction,"2026-01-05: opened internal alpha
+2026-01-20: bug bash happened
+2026-02-03: press briefing planned
+2026-03-01: GA scheduled",One event per line; sorted by date
+task_016,text_016,prompt_016,Product,"As a customer, I want to view my current balance and last 10 transactions, so that I can track spending.
+As a customer, I want to freeze and unfreeze my card quickly, so that I can act if it is lost.
+As a customer, I want push alerts for transactions over 200 EUR, so that I can spot fraud fast.",Exactly 3 lines; user story format; <120 chars each

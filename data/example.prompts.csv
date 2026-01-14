@@ -1,0 +1,17 @@
+id,prompt,tokens
+prompt_001,Summarize the text in 3 bullet points.,8
+prompt_002,Extract the user's name and status in JSON.,11
+prompt_003,Rewrite the text to be clearer and shorter.,9
+prompt_004,Compare the two products in the text and list 3 differences.,12
+prompt_005,Evaluate the text for policy compliance and answer pass/fail.,12
+prompt_006,"Extract key metrics as JSON with keys revenue, users, churn.",13
+prompt_007,Research summary: provide 2 takeaways and 1 open question.,11
+prompt_008,Provide operational steps to execute the request safely.,9
+prompt_009,Extract action items from the text.,7
+prompt_010,Redact personal information in the text.,7
+prompt_011,Find contradictions in the text.,6
+prompt_012,Write the SQL query to answer the question.,9
+prompt_013,Classify the sentiment of the message.,7
+prompt_014,Calculate the invoice totals.,5
+prompt_015,Extract the dated events and list them in order.,10
+prompt_016,Turn the requirements into user stories.,7

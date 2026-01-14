@@ -1,0 +1,346 @@
+id_task,id_text,id_prompt,prompt_original,prompt_improved,tokens_original,tokens_improved,tokens_delta,iterations_used,output_original,output_improved,output_tokens_original,output_tokens_improved,evaluation_original,evaluation_improved,model_task,model_improve,model_eval,leakage_flag,sanity_check_details,failure_reason
+task_001,text_001,prompt_001,Summarize the text in 3 bullet points.,Summarize the text in 3 bullet points.,8,8,0,2,"- **Optimizes prompt refinement** by comparing model outputs against expected answers while maintaining output quality, favoring shorter prompts when no degradation occurs.
+- **Tracks token usage and implements guardrails** to prevent infinite loops in iterative testing, ensuring cost efficiency and flexibility for local/API models.
+- **Provides evaluation insights** (before/after prompts, scores) for analysts to review improvements, enabling repeatable experiments.","- **Optimizes prompt refinement** by comparing model outputs against expected answers while maintaining output quality, favoring shorter prompts when no degradation occurs.
+- **Tracks token usage and implements guardrails** to prevent infinite loops in iterative testing, ensuring cost efficiency and flexibility for local/API models.
+- **Provides evaluation insights** (before/after prompts, scores) for analysts to review improvements, enabling repeatable experiments.",84,84,"{""pass"": false, ""score"": 0.85, ""issues"": [""Some phrasing differs slightly from the expected output (e.g., 'optimizes' vs. 'helps teams refine', 'iterative testing' vs. 'small, guarded iterations')."", ""The bullet points are not perfectly aligned in structure (e.g., 'favoring shorter prompts when no degradation occurs' \u2192 'prefers shorter prompts when quality stays the same').""], ""suggestions"": [""Ensure consistency in phrasing and logical flow across all bullet points for clarity."", ""Maintain identical wording for key concepts (e.g., 'comparing model outputs against expected answers' vs. 'model results to expected answers')."", ""Verify alignment with the exact structure of the expected output, particularly in bullet point phrasing.""]}","{""pass"": false, ""score"": 0.85, ""issues"": [""Some phrasing differs slightly from the expected output (e.g., 'optimizes' vs. 'helps teams refine', 'iterative testing' vs. 'small, guarded iterations')."", ""The bullet points are not perfectly aligned in structure (e.g., 'favoring shorter prompts when no degradation occurs' \u2192 'prefers shorter prompts when quality stays the same').""], ""suggestions"": [""Ensure consistency in phrasing and logical flow across all bullet points for clarity."", ""Maintain identical wording for key concepts (e.g., 'comparing model outputs against expected answers' vs. 'model results to expected answers')."", ""Verify alignment with the exact structure of the expected output, particularly in bullet point phrasing.""]}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,,no_improvement
+task_002,text_002,prompt_002,Extract the user's name and status in JSON.,Extract `{name}` and `{status}` from `{text}` as JSON with keys `name` and `status`.,11,30,19,1,"```json
+{
+  ""name"": ""Alice Nguyen"",
+  ""status"": {
+    ""account_status"": ""active"",
+    ""verification_status"": ""verified""
+  }
+}
+```","```json
+{
+  ""name"": ""Alice Nguyen"",
+  ""status"": ""active""
+}
+```",39,25,"{""pass"": false, ""score"": 0.3, ""issues"": [""Missing required key 'status' at top level (expected single value, got nested object)"", ""Nested structure under `status` is not compliant with expected flat format""], ""suggestions"": [""Remove the inner `verification_status` field and simplify to just `{ \""name\"": ..., \""status\"": ... }`"", ""If nested status fields are mandatory, clarify expected schema in task description""]}","{""pass"": true, ""score"": 1.0, ""issues"": [], ""suggestions"": []}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,,
+task_003,text_003,prompt_003,Rewrite the text to be clearer and shorter.,Rewrite the text to be clearer and shorter.,9,9,0,2,"The product delivers significantly faster performance while maintaining reliable stability, eliminating unnecessary repetition of speed claims and simplifying technical details into a clear, concise statement. Focused on delivering efficiency without overcomplicating its benefits, this version ensures readability by prioritizing key advantages upfront and streamlining the structure for smoother comprehension.","The product delivers significantly faster performance while maintaining reliable stability, eliminating unnecessary repetition of speed claims and simplifying technical details into a clear, concise statement. Focused on delivering efficiency without overcomplicating its benefits, this version ensures readability by prioritizing key advantages upfront and streamlining the structure for smoother comprehension.",54,54,"{""pass"": false, ""score"": 0.65, ""issues"": [""The output does not strictly adhere to a single concise paragraph format (it is more of an analytical critique rather than a rewritten statement)."", ""Lacks the direct, neutral, and focused technical benefit claim expected in the task."", ""Overly descriptive analysis instead of providing a clear, simplified product description."", ""Does not prioritize key advantages upfront as required.""], ""suggestions"": [""Provide a single, neutral, concise paragraph that directly states the core benefits (speed and reliability) without analysis or marketing language."", ""Remove all evaluative phrasing ('clear but too wordy', 'confuses readers') to focus solely on the product description."", ""Ensure the first sentence clearly conveys the main advantage (e.g., \u2018Delivers significantly faster performance with reliable stability\u2019)."", ""Trim technical details and redundant claims, keeping only essential, straightforward information.""]}","{""pass"": false, ""score"": 0.65, ""issues"": [""The output does not strictly adhere to a single concise paragraph format (it is more of an analytical critique rather than a rewritten statement)."", ""Lacks the direct, neutral, and focused technical benefit claim expected in the task."", ""Overly descriptive analysis instead of providing a clear, simplified product description."", ""Does not prioritize key advantages upfront as required.""], ""suggestions"": [""Provide a single, neutral, concise paragraph that directly states the core benefits (speed and reliability) without analysis or marketing language."", ""Remove all evaluative phrasing ('clear but too wordy', 'confuses readers') to focus solely on the product description."", ""Ensure the first sentence clearly conveys the main advantage (e.g., \u2018Delivers significantly faster performance with reliable stability\u2019)."", ""Trim technical details and redundant claims, keeping only essential, straightforward information.""]}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,too_large_increase,no_improvement
+task_004,text_004,prompt_004,Compare the two products in the text and list 3 differences.,Compare the two products in the text and list 3 differences.,12,12,0,2,"1. **Warranty Duration**: Product A has a **2-year warranty**, whereas Product B offers a **4-year warranty**.
+2. **Usage Rating**: Product A is rated for **light use**, while Product B is designed for **heavy use**.
+3. **Carrying Case Quality**: Product A includes a **basic carrying case**, while Product B ships with a **reinforced case**.","1. **Warranty Duration**: Product A has a **2-year warranty**, whereas Product B offers a **4-year warranty**.
+2. **Usage Rating**: Product A is rated for **light use**, while Product B is designed for **heavy use**.
+3. **Carrying Case Quality**: Product A includes a **basic carrying case**, while Product B ships with a **reinforced case**.",105,105,"{""pass"": false, ""score"": 0.6, ""issues"": [""Missing 'Price' comparison (expected format: '1) Price: Product A vs Product B')."", ""Warranty duration phrasing is slightly redundant ('Product A has a **2-year warranty**' \u2192 could be simplified to 'two-year warranty')."", ""Carrying case quality is not part of the expected criteria."", ""The output does not strictly follow the numbered list format (e.g., bullet points instead of 1), though minor deviations are acceptable if contextually clear.""], ""suggestions"": [""Include the missing 'Price' comparison in the first position to match the expected schema exactly."", ""Ensure phrasing is concise and avoids redundancy (e.g., omit 'Product A has a' for warranty)."", ""If additional details are provided, only include those explicitly requested in the task.""]}","{""pass"": false, ""score"": 0.6, ""issues"": [""Missing 'Price' comparison (expected format: '1) Price: Product A vs Product B')."", ""Warranty duration phrasing is slightly redundant ('Product A has a **2-year warranty**' \u2192 could be simplified to 'two-year warranty')."", ""Carrying case quality is not part of the expected criteria."", ""The output does not strictly follow the numbered list format (e.g., bullet points instead of 1), though minor deviations are acceptable if contextually clear.""], ""suggestions"": [""Include the missing 'Price' comparison in the first position to match the expected schema exactly."", ""Ensure phrasing is concise and avoids redundancy (e.g., omit 'Product A has a' for warranty)."", ""If additional details are provided, only include those explicitly requested in the task.""]}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,too_large_increase,sanity_check:too_large_increase
+task_005,text_005,prompt_005,Evaluate the text for policy compliance and answer pass/fail.,Evaluate the text for policy compliance and answer pass/fail.,12,12,0,1,pass,pass,1,1,"{""pass"": true, ""score"": 1.0, ""issues"": [], ""suggestions"": []}","{""pass"": true, ""score"": 1.0, ""issues"": [], ""suggestions"": []}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,,
+task_006,text_006,prompt_006,"Extract key metrics as JSON with keys revenue, users, churn.","Extract key metrics as JSON with keys revenue, users, churn.",13,13,0,1,"```json
+{
+  ""revenue"": ""$1.2M"",
+  ""users"": ""45k"",
+  ""churn"": ""3.5%""
+}
+```","```json
+{
+  ""revenue"": ""$1.2M"",
+  ""users"": ""45k"",
+  ""churn"": ""3.5%""
+}
+```",38,38,"{""pass"": true, ""score"": 1.0, ""issues"": [], ""suggestions"": []}","{""pass"": true, ""score"": 1.0, ""issues"": [], ""suggestions"": []}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,,
+task_007,text_007,prompt_007,Research summary: provide 2 takeaways and 1 open question.,Research summary: provide 2 takeaways and 1 open question.,11,11,0,2,"**Takeaways:**
+1. The drug demonstrated short-term efficacy in lowering blood pressure after eight weeks, though results varied among participants.
+2. Adherence improved with reminders, suggesting potential for better long-term outcomes if intervention strategies are optimized.
+
+**Open Question:**
+*How might the observed side effects (nausea/dizziness) impact long-term patient compliance and overall safety profiles across diverse populations?*","**Takeaways:**
+1. The drug demonstrated short-term efficacy in lowering blood pressure after eight weeks, though results varied among participants.
+2. Adherence improved with reminders, suggesting potential for better long-term outcomes if intervention strategies are optimized.
+
+**Open Question:**
+*How might the observed side effects (nausea/dizziness) impact long-term patient compliance and overall safety profiles across diverse populations?*",84,84,"{""pass"": false, ""score"": 0.65, ""issues"": [""The first takeaway does not align with the expected meaning (e.g., mentions 'short-term efficacy' without clarifying whether it was statistically significant or compared to placebo, and lacks explicit mention of *adults* as per expected output)."", ""The second takeaway is partially correct but oversimplifies adherence improvements\u2014it should acknowledge limitations like sample size or follow-up duration."", ""Open question does not fully match the expected format: it references side effects (nausea/dizziness) without explicitly addressing *long-term compliance* and *diverse populations* as required. The phrasing is more exploratory than a direct comparison of benefits vs. risks.""], ""suggestions"": [""Clarify whether short-term efficacy was statistically significant or compared to controls (e.g., 'demonstrated statistically significant BP reduction in adults')."", ""Specify sample size/limitations for adherence improvements to avoid overgeneralization."", ""Reframe the open question to explicitly link side effects to *long-term compliance* and *diverse populations* (e.g., \u2018Will BP benefits persist, and are tolerability risks acceptable long-term across varied demographics?\u2019).""]}","{""pass"": false, ""score"": 0.65, ""issues"": [""The first takeaway does not align with the expected meaning (e.g., mentions 'short-term efficacy' without clarifying whether it was statistically significant or compared to placebo, and lacks explicit mention of *adults* as per expected output)."", ""The second takeaway is partially correct but oversimplifies adherence improvements\u2014it should acknowledge limitations like sample size or follow-up duration."", ""Open question does not fully match the expected format: it references side effects (nausea/dizziness) without explicitly addressing *long-term compliance* and *diverse populations* as required. The phrasing is more exploratory than a direct comparison of benefits vs. risks.""], ""suggestions"": [""Clarify whether short-term efficacy was statistically significant or compared to controls (e.g., 'demonstrated statistically significant BP reduction in adults')."", ""Specify sample size/limitations for adherence improvements to avoid overgeneralization."", ""Reframe the open question to explicitly link side effects to *long-term compliance* and *diverse populations* (e.g., \u2018Will BP benefits persist, and are tolerability risks acceptable long-term across varied demographics?\u2019).""]}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,too_large_increase,sanity_check:too_large_increase
+task_008,text_008,prompt_008,Provide operational steps to execute the request safely.,Provide operational steps to execute the request safely.,9,9,0,2,"1. **Prepare deployment environment**
+   - Isolate a staging area with identical infrastructure to production (same feature flag configuration, monitoring setup).
+   - Verify dependencies and database schema compatibility for the new feature.
+
+2. **Deploy feature flag**
+   ```bash
+   # Enable canary flag in feature management system (e.g., LaunchDarkly, Flagsmith)
+   curl -X PUT ""https://api.flags.example.com/flags/{FLAG_ID}/enable"" \
+     -H ""Authorization: Bearer {API_KEY}"" \
+     -d '{""version"": 2, ""enabled"": true}'
+   ```
+
+3. **Run smoke tests**
+   - Execute automated regression suite targeting the new feature (10% of test cases).
+   - Validate:
+     - End-to-end workflows
+     - Error handling paths
+     - Performance thresholds
+
+4. **Schedule rollout window**
+   ```bash
+   # Set cron job for low-traffic period (e.g., 2 AM UTC)
+   crontab -e <<EOF
+   0 2 * * * /bin/bash /scripts/feature_rollout.sh {FLAG_ID} 10% >> /var/log/rollout.log 2>&1
+   EOF
+   ```
+
+5. **Enable canary deployment**
+   ```bash
+   # Update feature flag to target 10% users (via API or CLI)
+   curl -X POST ""https://api.flags.example.com/flags/{FLAG_ID}/targeting"" \
+     -H ""Authorization: Bearer {API_KEY}"" \
+     -d '{""version"": 2, ""targeting"": {""percentage"": 10}}'
+   ```
+
+6. **Monitor metrics**
+   ```bash
+   # Watch error rates and latency in real-time:
+   watch -n 5 ""curl -s https://monitoring.example.com/api/v1/metrics?query=error_rate&flag={FLAG_ID}""
+   ```
+   - Alert thresholds: Error rate > 0.1%, Latency > 2x baseline.
+
+7. **Expand gradually**
+   ```bash
+   # Increment targeting by 5% every hour until full rollout:
+   for i in {1..4}; do
+     curl -X POST ""https://api.flags.example.com/flags/{FLAG_ID}/targeting"" \
+       -H ""Authorization: Bearer {API_KEY}"" \
+       -d '{""version"": 2, ""targeting"": {""percentage"": $(($(i*5)+10))}}'
+     sleep 3600
+   done
+   ```
+
+8. **Rollback procedure**
+   ```bash
+   # If error rate exceeds threshold:
+   curl -X PUT ""https://api.flags.example.com/flags/{FLAG_ID}/disable"" \
+     -H ""Authorization: Bearer {API_KEY}""
+   ```
+   - Notify stakeholders via Slack channel: `#ops-alerts` with message:
+     *""Feature rollout aborted. Error rate exceeded threshold.""*
+
+9. **Documentation**
+   ```bash
+   # Log rollout in Jira ticket or internal wiki:
+   echo ""Rollout completed at {timestamp}. Targeting: 100%."" >> /var/log/feature_rollout.log
+   ```
+
+10. **Post-mortem**
+    - Schedule 30-minute debrief with team in `#ops-review` channel.
+    - Share findings in status channel: `##status/{date}` with:
+      - Success metrics
+      - Observed anomalies
+      - Next steps for full deployment.","1. **Prepare deployment environment**
+   - Isolate a staging area with identical infrastructure to production (same feature flag configuration, monitoring setup).
+   - Verify dependencies and database schema compatibility for the new feature.
+
+2. **Deploy feature flag**
+   ```bash
+   # Enable canary flag in feature management system (e.g., LaunchDarkly, Flagsmith)
+   curl -X PUT ""https://api.flags.example.com/flags/{FLAG_ID}/enable"" \
+     -H ""Authorization: Bearer {API_KEY}"" \
+     -d '{""version"": 2, ""enabled"": true}'
+   ```
+
+3. **Run smoke tests**
+   - Execute automated regression suite targeting the new feature (10% of test cases).
+   - Validate:
+     - End-to-end workflows
+     - Error handling paths
+     - Performance thresholds
+
+4. **Schedule rollout window**
+   ```bash
+   # Set cron job for low-traffic period (e.g., 2 AM UTC)
+   crontab -e <<EOF
+   0 2 * * * /bin/bash /scripts/feature_rollout.sh {FLAG_ID} 10% >> /var/log/rollout.log 2>&1
+   EOF
+   ```
+
+5. **Enable canary deployment**
+   ```bash
+   # Update feature flag to target 10% users (via API or CLI)
+   curl -X POST ""https://api.flags.example.com/flags/{FLAG_ID}/targeting"" \
+     -H ""Authorization: Bearer {API_KEY}"" \
+     -d '{""version"": 2, ""targeting"": {""percentage"": 10}}'
+   ```
+
+6. **Monitor metrics**
+   ```bash
+   # Watch error rates and latency in real-time:
+   watch -n 5 ""curl -s https://monitoring.example.com/api/v1/metrics?query=error_rate&flag={FLAG_ID}""
+   ```
+   - Alert thresholds: Error rate > 0.1%, Latency > 2x baseline.
+
+7. **Expand gradually**
+   ```bash
+   # Increment targeting by 5% every hour until full rollout:
+   for i in {1..4}; do
+     curl -X POST ""https://api.flags.example.com/flags/{FLAG_ID}/targeting"" \
+       -H ""Authorization: Bearer {API_KEY}"" \
+       -d '{""version"": 2, ""targeting"": {""percentage"": $(($(i*5)+10))}}'
+     sleep 3600
+   done
+   ```
+
+8. **Rollback procedure**
+   ```bash
+   # If error rate exceeds threshold:
+   curl -X PUT ""https://api.flags.example.com/flags/{FLAG_ID}/disable"" \
+     -H ""Authorization: Bearer {API_KEY}""
+   ```
+   - Notify stakeholders via Slack channel: `#ops-alerts` with message:
+     *""Feature rollout aborted. Error rate exceeded threshold.""*
+
+9. **Documentation**
+   ```bash
+   # Log rollout in Jira ticket or internal wiki:
+   echo ""Rollout completed at {timestamp}. Targeting: 100%."" >> /var/log/feature_rollout.log
+   ```
+
+10. **Post-mortem**
+    - Schedule 30-minute debrief with team in `#ops-review` channel.
+    - Share findings in status channel: `##status/{date}` with:
+      - Success metrics
+      - Observed anomalies
+      - Next steps for full deployment.",722,722,"{""pass"": false, ""score"": 0.75, ""issues"": [""Step 1 is overly detailed with infrastructure-specific notes (e.g., 'same feature flag configuration')\u2014should be more generic."", ""Steps 3, 6, and 9 include redundant or unnecessary commands (e.g., `watch` command in Step 6 lacks clarity on expected output format)."", ""Step 7\u2019s script assumes sequential execution without error handling for API failures."", ""Step 8\u2019s rollback procedure lacks explicit confirmation of success/failure (e.g., no validation step for disabled flag)."", ""Missing explicit mention of **pre-rollout checks** (e.g., user segmentation, dependency audits) in Step 1.""], ""suggestions"": [""Simplify Step 1 to focus on *key actions* (isolate staging area, verify compatibility) without technical specifics."", ""Replace `watch` command in Step 6 with a clear metric query description (e.g., \u2018Poll every 5 mins for error rates\u2019)."", ""Add validation steps after enabling the flag (e.g., confirm API response status code)."", ""Standardize rollback notifications to include: *timestamp*, *error details*, and *stakeholder channel*.""]}","{""pass"": false, ""score"": 0.75, ""issues"": [""Step 1 is overly detailed with infrastructure-specific notes (e.g., 'same feature flag configuration')\u2014should be more generic."", ""Steps 3, 6, and 9 include redundant or unnecessary commands (e.g., `watch` command in Step 6 lacks clarity on expected output format)."", ""Step 7\u2019s script assumes sequential execution without error handling for API failures."", ""Step 8\u2019s rollback procedure lacks explicit confirmation of success/failure (e.g., no validation step for disabled flag)."", ""Missing explicit mention of **pre-rollout checks** (e.g., user segmentation, dependency audits) in Step 1.""], ""suggestions"": [""Simplify Step 1 to focus on *key actions* (isolate staging area, verify compatibility) without technical specifics."", ""Replace `watch` command in Step 6 with a clear metric query description (e.g., \u2018Poll every 5 mins for error rates\u2019)."", ""Add validation steps after enabling the flag (e.g., confirm API response status code)."", ""Standardize rollback notifications to include: *timestamp*, *error details*, and *stakeholder channel*.""]}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,too_large_increase,sanity_check:too_large_increase
+task_009,text_009,prompt_009,Extract action items from the text.,Extract action items from the text.,7,7,0,2,"```json
+[
+    {
+        ""action"": ""Draft beta announcement email"",
+        ""responsible"": ""Marta"",
+        ""due_date"": ""2026-02-01"",
+        ""priority"": ""high""
+    },
+    {
+        ""action"": ""Add SSO support"",
+        ""responsible"": ""Ken"",
+        ""due_date"": ""2026-02-20"",
+        ""priority"": ""medium""
+    }
+]
+```","```json
+[
+    {
+        ""action"": ""Draft beta announcement email"",
+        ""responsible"": ""Marta"",
+        ""due_date"": ""2026-02-01"",
+        ""priority"": ""high""
+    },
+    {
+        ""action"": ""Add SSO support"",
+        ""responsible"": ""Ken"",
+        ""due_date"": ""2026-02-20"",
+        ""priority"": ""medium""
+    }
+]
+```",89,89,"{""pass"": false, ""score"": 0.6, ""issues"": [""Missing required field: `owner` (should be 'Marta' and 'Ken')"", ""Missing third action in the list (expected: 'Confirm legal terms with counsel')"", ""Due date for legal terms is not provided (should match expected format)"", ""Priority for legal terms is missing (should be 'low')""], ""suggestions"": [""Add missing action: `{'action': 'Confirm legal terms with counsel', 'owner': null, 'due_date': null, 'priority': 'low'}`"", ""Correct field names to match expected schema (`owner` instead of `responsible`)"", ""Ensure all fields are present for each entry (e.g., `null` for missing due dates/priorities where applicable)""]}","{""pass"": false, ""score"": 0.6, ""issues"": [""Missing required field: `owner` (should be 'Marta' and 'Ken')"", ""Missing third action in the list (expected: 'Confirm legal terms with counsel')"", ""Due date for legal terms is not provided (should match expected format)"", ""Priority for legal terms is missing (should be 'low')""], ""suggestions"": [""Add missing action: `{'action': 'Confirm legal terms with counsel', 'owner': null, 'due_date': null, 'priority': 'low'}`"", ""Correct field names to match expected schema (`owner` instead of `responsible`)"", ""Ensure all fields are present for each entry (e.g., `null` for missing due dates/priorities where applicable)""]}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,too_large_increase,sanity_check:too_large_increase
+task_010,text_010,prompt_010,Redact personal information in the text.,Redact personal information in the text.,7,7,0,2,"Hi Support,
+
+You can reach me at **[REDACTED_EMAIL]** or **+[REDACTED_PHONE]**.
+
+Please update the shipping address to **Sonnenallee 17, 12045 Berlin**.","Hi Support,
+
+You can reach me at **[REDACTED_EMAIL]** or **+[REDACTED_PHONE]**.
+
+Please update the shipping address to **Sonnenallee 17, 12045 Berlin**.",41,41,"{""pass"": false, ""score"": 0.5, ""issues"": [""Missing personal name placeholder (`[REDACTED_NAME]`)."", ""Missing account number placeholder (`[REDACTED_ACCOUNT]`)."", ""Greeting and closing ('Hi Support, Thanks!') are not included in the expected output format."", ""The address is correctly redacted but lacks the full expected structure (e.g., no mention of 'My name is' or 'account number').""], ""suggestions"": [""Include a placeholder for `[REDACTED_NAME]` to match the expected format."", ""Add `[REDACTED_ACCOUNT]` at the end as required."", ""Ensure consistency with the expected greeting/closing (e.g., omit redundant 'Hi Support' if not explicitly needed)."", ""Verify that all redacted fields are preserved in the correct order and phrasing.""]}","{""pass"": false, ""score"": 0.5, ""issues"": [""Missing personal name placeholder (`[REDACTED_NAME]`)."", ""Missing account number placeholder (`[REDACTED_ACCOUNT]`)."", ""Greeting and closing ('Hi Support, Thanks!') are not included in the expected output format."", ""The address is correctly redacted but lacks the full expected structure (e.g., no mention of 'My name is' or 'account number').""], ""suggestions"": [""Include a placeholder for `[REDACTED_NAME]` to match the expected format."", ""Add `[REDACTED_ACCOUNT]` at the end as required."", ""Ensure consistency with the expected greeting/closing (e.g., omit redundant 'Hi Support' if not explicitly needed)."", ""Verify that all redacted fields are preserved in the correct order and phrasing.""]}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,too_large_increase,no_improvement
+task_011,text_011,prompt_011,Find contradictions in the text.,Find contradictions in the text.,6,6,0,2,"```json
+{
+  ""contradictions"": [
+    {
+      ""sentence1"": ""Employees must change their password every 90 days."",
+      ""sentence2"": ""Employees are not required to change their password on any schedule.""
+    }
+  ]
+}
+```","```json
+{
+  ""contradictions"": [
+    {
+      ""sentence1"": ""Employees must change their password every 90 days."",
+      ""sentence2"": ""Employees are not required to change their password on any schedule.""
+    }
+  ]
+}
+```",51,51,"{""pass"": false, ""score"": 0.0, ""issues"": [""invalid_json""], ""suggestions"": []}","{""pass"": false, ""score"": 0.0, ""issues"": [""invalid_json""], ""suggestions"": []}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,too_large_increase,sanity_check:too_large_increase
+task_012,text_012,prompt_012,Write the SQL query to answer the question.,Write the SQL query to answer the question.,9,9,0,2,"```sql
+SELECT
+    c.name,
+    MAX(o.order_date) AS most_recent_order_date
+FROM
+    customers c
+LEFT JOIN
+    orders o ON c.id = o.customer_id
+GROUP BY
+    c.id, c.name;
+```","```sql
+SELECT
+    c.name,
+    MAX(o.order_date) AS most_recent_order_date
+FROM
+    customers c
+LEFT JOIN
+    orders o ON c.id = o.customer_id
+GROUP BY
+    c.id, c.name;
+```",45,45,"{""pass"": false, ""score"": 0.5, ""issues"": [""JOIN condition direction is reversed (`c.id = o.customer_id` vs `o.customer_id = c.id`). Both are logically equivalent but not identical."", ""Missing `c.id` in the `GROUP BY` clause (though functionally correct due to `LEFT JOIN`), though expected output uses only `c.name`."", ""No trailing semicolon at the end of the query (minor stylistic issue).""], ""suggestions"": [""Ensure JOIN conditions match exactly as required by the expected format (order of operands)."", ""Clarify whether `GROUP BY c.id` or `c.name` is strictly necessary based on column usage in SELECT."", ""Add trailing semicolon for consistency with SQL standards.""]}","{""pass"": false, ""score"": 0.5, ""issues"": [""JOIN condition direction is reversed (`c.id = o.customer_id` vs `o.customer_id = c.id`). Both are logically equivalent but not identical."", ""Missing `c.id` in the `GROUP BY` clause (though functionally correct due to `LEFT JOIN`), though expected output uses only `c.name`."", ""No trailing semicolon at the end of the query (minor stylistic issue).""], ""suggestions"": [""Ensure JOIN conditions match exactly as required by the expected format (order of operands)."", ""Clarify whether `GROUP BY c.id` or `c.name` is strictly necessary based on column usage in SELECT."", ""Add trailing semicolon for consistency with SQL standards.""]}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,too_large_increase,sanity_check:too_large_increase
+task_013,text_013,prompt_013,Classify the sentiment of the message.,Classify the sentiment of the message.,7,7,0,2,"```json
+{
+  ""sentiment"": ""negative"",
+  ""evidence_quotes"": [
+    {
+      ""text"": ""the sync keeps failing and it’s wasting my time."",
+      ""reason"": ""Direct complaint about recurring technical issue causing frustration""
+    },
+    {
+      ""text"": ""Please fix this soon."",
+      ""reason"": ""Urgent request for resolution, implying dissatisfaction with current state""
+    }
+  ]
+}
+```","```json
+{
+  ""sentiment"": ""negative"",
+  ""evidence_quotes"": [
+    {
+      ""text"": ""the sync keeps failing and it’s wasting my time."",
+      ""reason"": ""Direct complaint about recurring technical issue causing frustration""
+    },
+    {
+      ""text"": ""Please fix this soon."",
+      ""reason"": ""Urgent request for resolution, implying dissatisfaction with current state""
+    }
+  ]
+}
+```",89,89,"{""pass"": false, ""score"": 0.75, ""issues"": [""Includes unnecessary `reason` field under `evidence_quotes` (should only contain `text`)."", ""Does not match the exact schema format for `evidence` (e.g., omits punctuation like commas in quotes).""], ""suggestions"": [""Remove `reason` from nested evidence entries."", ""Ensure quoted text matches expected format exactly (e.g., no extra punctuation or phrasing variations)."", ""Consider trimming redundant phrases (e.g., 'it\u2019s' \u2192 just 'is') for consistency.""]}","{""pass"": false, ""score"": 0.75, ""issues"": [""Includes unnecessary `reason` field under `evidence_quotes` (should only contain `text`)."", ""Does not match the exact schema format for `evidence` (e.g., omits punctuation like commas in quotes).""], ""suggestions"": [""Remove `reason` from nested evidence entries."", ""Ensure quoted text matches expected format exactly (e.g., no extra punctuation or phrasing variations)."", ""Consider trimming redundant phrases (e.g., 'it\u2019s' \u2192 just 'is') for consistency.""]}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,,no_improvement
+task_014,text_014,prompt_014,Calculate the invoice totals.,Calculate the invoice totals.,5,5,0,2,"```json
+{
+  ""subtotal"": {
+    ""notebooks"": 13.50,
+    ""pensets"": 12.50,
+    ""shipping"": 3.99,
+    ""grand_total_before_tax"": 29.99
+  },
+  ""tax_amount"": 5.6981,
+  ""invoice_total"": 35.69
+}
+```","```json
+{
+  ""subtotal"": {
+    ""notebooks"": 13.50,
+    ""pensets"": 12.50,
+    ""shipping"": 3.99,
+    ""grand_total_before_tax"": 29.99
+  },
+  ""tax_amount"": 5.6981,
+  ""invoice_total"": 35.69
+}
+```",62,62,"{""pass"": false, ""score"": 0.6, ""issues"": [""Subtotal fields (`notebooks`, `pensets`) are incorrect and should be omitted (only `shipping` is valid)."", ""Tax amount has 4 decimals instead of 2."", ""Grand total before tax (`grand_total_before_tax`) is not part of the expected schema."", ""Missing required field: `tax` (should match `tax_amount`).""], ""suggestions"": [""Correct subtotal fields to only include `shipping` if applicable, or remove them entirely based on context."", ""Round tax amount to 2 decimal places (e.g., `5.70`)."", ""Remove `grand_total_before_tax` as it\u2019s not in the expected schema."", ""Ensure `tax` field matches `tax_amount` exactly.""]}","{""pass"": false, ""score"": 0.6, ""issues"": [""Subtotal fields (`notebooks`, `pensets`) are incorrect and should be omitted (only `shipping` is valid)."", ""Tax amount has 4 decimals instead of 2."", ""Grand total before tax (`grand_total_before_tax`) is not part of the expected schema."", ""Missing required field: `tax` (should match `tax_amount`).""], ""suggestions"": [""Correct subtotal fields to only include `shipping` if applicable, or remove them entirely based on context."", ""Round tax amount to 2 decimal places (e.g., `5.70`)."", ""Remove `grand_total_before_tax` as it\u2019s not in the expected schema."", ""Ensure `tax` field matches `tax_amount` exactly.""]}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,too_large_increase,sanity_check:too_large_increase
+task_015,text_015,prompt_015,Extract the dated events and list them in order.,Extract the dated events and list them in order.,10,10,0,2,"2026-01-05 – Internal alpha release
+2026-01-20 – Bug bash
+2026-02-03 – Press briefing (marketing)
+2026-03-01 – General Availability (GA)","2026-01-05 – Internal alpha release
+2026-01-20 – Bug bash
+2026-02-03 – Press briefing (marketing)
+2026-03-01 – General Availability (GA)",39,39,"{""pass"": false, ""score"": 0.75, ""issues"": [""Missing colon (`:`) after dates for all entries"", ""Descriptive phrasing does not fully match expected format (e.g., 'opened internal alpha' vs. 'Internal alpha release')"", ""Some terms are slightly off ('Bug bash' \u2192 'bug bash happened', 'marketing' \u2192 'planned')""], ""suggestions"": [""Use exact phrasing from the expected output for consistency: `2026-01-05: opened internal alpha`"", ""Ensure all dates are followed by a colon and space (e.g., `2026-01-20:`)"", ""Match verb tense/phrasing precisely where required (e.g., 'happened' instead of 'Bug bash')""]}","{""pass"": false, ""score"": 0.75, ""issues"": [""Missing colon (`:`) after dates for all entries"", ""Descriptive phrasing does not fully match expected format (e.g., 'opened internal alpha' vs. 'Internal alpha release')"", ""Some terms are slightly off ('Bug bash' \u2192 'bug bash happened', 'marketing' \u2192 'planned')""], ""suggestions"": [""Use exact phrasing from the expected output for consistency: `2026-01-05: opened internal alpha`"", ""Ensure all dates are followed by a colon and space (e.g., `2026-01-20:`)"", ""Match verb tense/phrasing precisely where required (e.g., 'happened' instead of 'Bug bash')""]}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,too_large_increase,sanity_check:too_large_increase
+task_016,text_016,prompt_016,Turn the requirements into user stories.,Turn the requirements into user stories.,7,7,0,2,"As a **customer**, I want to **view my current balance and last 10 transactions** so I can track spending easily.
+
+As a **customer**, I want to **freeze/unfreeze my card instantly** if lost/theft occurs for security.
+
+As a **customer**, I want **push alerts for large transactions (>200 EUR)** to detect fraud quickly.","As a **customer**, I want to **view my current balance and last 10 transactions** so I can track spending easily.
+
+As a **customer**, I want to **freeze/unfreeze my card instantly** if lost/theft occurs for security.
+
+As a **customer**, I want **push alerts for large transactions (>200 EUR)** to detect fraud quickly.",88,88,"{""pass"": false, ""score"": 0.65, ""issues"": [""Redundant repetition of 'As a **customer**,' (should be removed for conciseness)"", ""Grammar/wording inconsistencies ('view my current balance and last 10 transactions' vs. 'track spending easily')"", ""Incomplete phrasing in some bullet points (e.g., 'freeze/unfreeze my card instantly if lost/theft occurs' lacks clarity on action context)"", ""Length exceeds 120 chars for some lines""], ""suggestions"": [""Trim redundant phrases and standardize wording (e.g., 'view balance & last 10 transactions' \u2192 concise)."", ""Clarify 'if lost/theft occurs' to specify urgency (e.g., 'freeze/unfreeze card immediately upon loss/theft')."", ""Ensure all lines are <120 chars and grammatically consistent.""]}","{""pass"": false, ""score"": 0.65, ""issues"": [""Redundant repetition of 'As a **customer**,' (should be removed for conciseness)"", ""Grammar/wording inconsistencies ('view my current balance and last 10 transactions' vs. 'track spending easily')"", ""Incomplete phrasing in some bullet points (e.g., 'freeze/unfreeze my card instantly if lost/theft occurs' lacks clarity on action context)"", ""Length exceeds 120 chars for some lines""], ""suggestions"": [""Trim redundant phrases and standardize wording (e.g., 'view balance & last 10 transactions' \u2192 concise)."", ""Clarify 'if lost/theft occurs' to specify urgency (e.g., 'freeze/unfreeze card immediately upon loss/theft')."", ""Ensure all lines are <120 chars and grammatically consistent.""]}",mistralai/ministral-3-3b,mistralai/ministral-3-3b,mistralai/ministral-3-3b,no,too_large_increase,sanity_check:too_large_increase
