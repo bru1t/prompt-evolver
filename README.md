@@ -1,5 +1,12 @@
-<p align="center"><h1 align="center">Prompt Evolver</h1></p>
-<p align="center">Prompt optimization for LLM workflows.</p>
+<p align="center">
+  <br/>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/prompt_evolver_logo&text_dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="docs/images/prompt_evolver_logo&text_light.png">
+    <img alt="Prompt Evolver logo" src="docs/images/prompt_evolver_logo&text_light.png" width="220">
+  </picture>
+</p>
+<p align="center"><strong>Prompt optimization for LLM workflows</strong></p>
 
 ## Overview
 
