@@ -1,9 +1,9 @@
 <p align="center">
   <br/>
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/prompt_evolver_logo&text_dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="docs/images/prompt_evolver_logo&text_light.png">
-    <img alt="Prompt Evolver logo" src="docs/images/prompt_evolver_logo&text_light.png" width="220">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/bru1t/prompt-evolver/refs/heads/main/docs/images/prompt_evolver_logo%26text_dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/bru1t/prompt-evolver/refs/heads/main/docs/images/prompt_evolver_logo%26text_light.png">
+    <img alt="Prompt Evolver logo" src="https://raw.githubusercontent.com/bru1t/prompt-evolver/refs/heads/main/docs/images/prompt_evolver_logo%26text_light.png" width="220">
   </picture>
 </p>
 <p align="center"><strong>Prompt optimization for LLM workflows</strong></p>
