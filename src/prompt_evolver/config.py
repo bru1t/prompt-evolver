@@ -26,6 +26,9 @@ class LLMConfig:
     api_url: str | None = None
     api_key_env: str | None = None
     timeout_seconds: float = 30.0
+    max_retries: int = 3
+    base_delay_seconds: float = 1.0
+    max_delay_seconds: float = 30.0
 
 
 @dataclass(frozen=True)
@@ -108,6 +111,9 @@ def load_config(path: str | Path) -> EvolverConfig:
             api_url=execution_payload.get("api_url"),
             api_key_env=execution_payload.get("api_key_env"),
             timeout_seconds=float(execution_payload.get("timeout_seconds", 30.0)),
+            max_retries=int(execution_payload.get("max_retries", 3)),
+            base_delay_seconds=float(execution_payload.get("base_delay_seconds", 1.0)),
+            max_delay_seconds=float(execution_payload.get("max_delay_seconds", 30.0)),
         ),
         llm_improvement=LLMConfig(
             mode=improvement_payload.get("mode", "local"),
@@ -115,6 +121,9 @@ def load_config(path: str | Path) -> EvolverConfig:
             api_url=improvement_payload.get("api_url"),
             api_key_env=improvement_payload.get("api_key_env"),
             timeout_seconds=float(improvement_payload.get("timeout_seconds", 30.0)),
+            max_retries=int(improvement_payload.get("max_retries", 3)),
+            base_delay_seconds=float(improvement_payload.get("base_delay_seconds", 1.0)),
+            max_delay_seconds=float(improvement_payload.get("max_delay_seconds", 30.0)),
         ),
         llm_evaluation=LLMConfig(
             mode=evaluation_payload.get("mode", "local"),
@@ -122,6 +131,9 @@ def load_config(path: str | Path) -> EvolverConfig:
             api_url=evaluation_payload.get("api_url"),
             api_key_env=evaluation_payload.get("api_key_env"),
             timeout_seconds=float(evaluation_payload.get("timeout_seconds", 30.0)),
+            max_retries=int(evaluation_payload.get("max_retries", 3)),
+            base_delay_seconds=float(evaluation_payload.get("base_delay_seconds", 1.0)),
+            max_delay_seconds=float(evaluation_payload.get("max_delay_seconds", 30.0)),
         ),
         max_no_improve=int(payload.get("max_no_improve", 2)),
         leakage_similarity_threshold=float(payload.get("leakage_similarity_threshold", 0.45)),

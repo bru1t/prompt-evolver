@@ -30,6 +30,15 @@ from .llm import LLMClient, create_llm_client
 from .models import EvaluationFeedback, OutputScore, TaskRecord, TaskResult
 from .tokenizer import SimpleTokenCounter, TokenCounter
 
+try:
+    import jsonschema
+    from jsonschema import ValidationError as JSONSchemaValidationError
+
+    JSONSCHEMA_AVAILABLE = True
+except ImportError:
+    JSONSCHEMA_AVAILABLE = False
+    JSONSchemaValidationError = Exception  # type: ignore
+
 
 @dataclass(frozen=True)
 class CandidateEvaluation:
@@ -49,6 +58,37 @@ class LeakageResult:
     detected: bool
     similarity: float
     ngram_overlap: float
+
+
+# JSON schema for evaluator response validation
+EVALUATION_SCHEMA = {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "pass": {
+            "type": "boolean",
+            "description": "Whether the output meets the requirements",
+        },
+        "score": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Numerical score between 0.0 and 1.0",
+        },
+        "issues": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "List of issues found in the output",
+        },
+        "suggestions": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "List of suggestions for improvement",
+        },
+    },
+    "required": ["pass", "score", "issues", "suggestions"],
+    "additionalProperties": True,  # Allow extra fields for flexibility
+}
 
 
 def run_pipeline(
@@ -649,24 +689,58 @@ def _extract_prompt(response: str) -> str:
 
 
 def _parse_evaluation_response(response: str) -> EvaluationFeedback:
-    """Parse evaluator JSON response into structured feedback.
+    """Parse evaluator JSON response into structured feedback with schema validation.
 
     Args:
         response: Raw evaluator response string.
 
     Returns:
         EvaluationFeedback: Parsed feedback.
+
+    Raises:
+        ValueError: If the JSON response does not conform to the expected schema.
     """
 
-# [ ] FIX: EVALUATION_SCHEMA_VALIDATION
-# Problem: Evaluator JSON is not schema-validated; malformed payloads can silently pass.
+    logger = logging.getLogger("prompt_evolver")
     payload = _load_json_from_response(response)
+
+    # Validate against schema if jsonschema is available
+    if JSONSCHEMA_AVAILABLE:
+        try:
+            jsonschema.validate(instance=payload, schema=EVALUATION_SCHEMA)
+        except JSONSchemaValidationError as exc:
+            error_msg = f"Evaluator response failed schema validation: {exc.message}"
+            logger.error(error_msg)
+            logger.debug(f"Invalid payload: {payload}")
+            # Return a failure feedback with schema validation error
+            return EvaluationFeedback(
+                passed=False,
+                score=0.0,
+                issues=[f"schema_validation_error: {exc.message}"],
+                suggestions=["Ensure evaluator returns valid JSON with required fields"],
+                raw=payload,
+            )
+    else:
+        logger.warning(
+            "jsonschema not available - skipping schema validation. "
+            "Install with: pip install jsonschema"
+        )
+
+    # Extract and validate field values
     passed = bool(payload.get("pass", False))
     score = float(payload.get("score", 0.0))
+
+    # Validate score range
+    if not 0.0 <= score <= 1.0:
+        logger.warning(f"Score {score} outside valid range [0.0, 1.0], clamping")
+        score = max(0.0, min(1.0, score))
+
     issues = [str(item) for item in payload.get("issues", []) if str(item).strip()]
     suggestions = [str(item) for item in payload.get("suggestions", []) if str(item).strip()]
+
     if not passed and not issues:
         issues = ["unspecified_issues"]
+
     return EvaluationFeedback(
         passed=passed,
         score=score,

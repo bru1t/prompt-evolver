@@ -64,9 +64,42 @@ Each LLM config can set:
 - model: model identifier
 - api_url: base URL
 - api_key_env: environment variable name for API key
-- timeout_seconds: HTTP timeout
+- timeout_seconds: HTTP timeout (default: 30.0)
+- max_retries: maximum retry attempts for transient errors (default: 3)
+- base_delay_seconds: initial delay before first retry (default: 1.0)
+- max_delay_seconds: maximum delay between retries (default: 30.0)
+
+**Retry Logic:**
+
+The pipeline includes automatic retry logic with exponential backoff for transient API failures:
+
+- **Retryable Errors**: HTTP 429 (rate limit), 500 (server error), 503 (service unavailable)
+- **Non-Retryable Errors**: HTTP 400 (bad request), 401 (unauthorized), 404 (not found)
+- **Backoff Strategy**: Exponential with configurable base and maximum delays
+
+Example retry configuration:
+```yaml
+llm_execution:
+  mode: openai_compatible
+  model: gpt-4
+  api_url: https://api.openai.com/v1
+  max_retries: 5           # Retry up to 5 times
+  base_delay_seconds: 2.0  # Start with 2 second delay
+  max_delay_seconds: 60.0  # Cap delay at 60 seconds
+```
+
+**Retry Delay Calculation:**
+- Attempt 1: 2.0s
+- Attempt 2: 4.0s
+- Attempt 3: 8.0s
+- Attempt 4: 16.0s
+- Attempt 5: 32.0s
+- Attempt 6+: 60.0s (capped)
+
+Retry attempts and delays are logged for debugging.
 
 Troubleshooting:
 - Timeouts: increase `timeout_seconds` or use a faster local model.
+- Rate limits: increase `max_retries` and `max_delay_seconds`.
 - Bad URLs: confirm the API base URL includes the correct port.
 - Missing API key: ensure `api_key_env` is set and exported in your shell.
