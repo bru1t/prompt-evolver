@@ -11,7 +11,7 @@
 ## Overview
 
 Prompt Evolver is a lightweight, repeatable way to improve prompts for LLM pipelines.
-You give it a prompt, a few test inputs, and what ”good output” should look like. It runs your prompt, checks whether the output matches your expectations, and (when it fails) asks an LLM to propose a better prompt.
+You give it a prompt, a few test inputs, and what “good output” should look like. It runs your prompt, checks whether the output matches your expectations, and (when it fails) asks an LLM to propose a better prompt.
 
 It’s built for people shipping LLM workflows who want measurable improvements, protection against prompts “cheating” (copying test answers), and a simple CSV-based process that’s easy to version and review.
 
