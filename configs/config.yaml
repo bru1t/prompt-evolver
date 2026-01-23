@@ -11,17 +11,15 @@ max_prompt_increase_ratio: 2.0
 max_prompt_increase_tokens: 40
 min_improvement_attempts: 2
 llm_execution:
-  mode: lmstudio
-  model: mistralai/ministral-3-3b
+  mode: lmstudio  # or: openai_compatible, echo, local
   api_url: http://127.0.0.1:1234
   timeout_seconds: 30
+  # Model name should be specified when calling run_pipeline()
 llm_improvement:
   mode: lmstudio
-  model: mistralai/ministral-3-3b
   api_url: http://127.0.0.1:1234
   timeout_seconds: 30
 llm_evaluation:
   mode: lmstudio
-  model: mistralai/ministral-3-3b
   api_url: http://127.0.0.1:1234
   timeout_seconds: 30

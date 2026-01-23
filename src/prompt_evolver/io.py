@@ -38,14 +38,43 @@ def read_prompts_df(path: str | Path) -> pd.DataFrame:
         pd.DataFrame: Dataframe with prompt rows.
 
     Raises:
-        ValueError: If required columns are missing.
+        ValueError: If required columns are missing or invalid.
         FileNotFoundError: If the file does not exist.
     """
 
-# [ ] FIX: ID_DTYPE_NORMALIZATION
-# Problem: IDs can be read as numeric/float; enforce string dtype and strip whitespace.
-    df = pd.read_csv(path)
+    # Force IDs to be read as strings to prevent float conversion (e.g. "1.0" -> "1")
+    df = pd.read_csv(path, dtype={"id": str})
     _require_columns(df, {"id", "prompt"}, "prompts")
+
+    # Normalize ID dtype: strip whitespace and reject empty IDs
+    df["id"] = df["id"].str.strip()
+    if df["id"].isna().any() or (df["id"] == "").any():
+        invalid_rows = df[df["id"].isna() | (df["id"] == "")].index.tolist()
+        raise ValueError(
+            f"CSV validation failed: prompts.csv contains empty or NaN IDs.\n\n"
+            f"Invalid rows (0-indexed): {invalid_rows}\n\n"
+            f"Please ensure all rows have non-empty ID values."
+        )
+
+    # Validate ID uniqueness
+    if df["id"].duplicated().any():
+        duplicates = df[df["id"].duplicated(keep=False)]["id"].tolist()
+        raise ValueError(
+            f"CSV validation failed: prompts.csv contains duplicate IDs.\n\n"
+            f"Duplicate IDs: {', '.join(set(duplicates))}\n\n"
+            f"Please ensure all prompt IDs are unique."
+        )
+
+    # Normalize prompt field: strip whitespace and reject empty prompts
+    df["prompt"] = df["prompt"].str.strip()
+    if df["prompt"].isna().any() or (df["prompt"] == "").any():
+        invalid_rows = df[df["prompt"].isna() | (df["prompt"] == "")].index.tolist()
+        raise ValueError(
+            f"CSV validation failed: prompts.csv contains empty or NaN prompts.\n\n"
+            f"Invalid rows (0-indexed): {invalid_rows}\n\n"
+            f"Please ensure all rows have non-empty prompt values."
+        )
+
     return df
 
 
@@ -59,12 +88,43 @@ def read_texts_df(path: str | Path) -> pd.DataFrame:
         pd.DataFrame: Dataframe with text rows.
 
     Raises:
-        ValueError: If required columns are missing.
+        ValueError: If required columns are missing or invalid.
         FileNotFoundError: If the file does not exist.
     """
 
-    df = pd.read_csv(path)
+    # Force IDs to be read as strings
+    df = pd.read_csv(path, dtype={"id": str})
     _require_columns(df, {"id", "text"}, "texts")
+
+    # Normalize ID dtype: strip whitespace and reject empty IDs
+    df["id"] = df["id"].str.strip()
+    if df["id"].isna().any() or (df["id"] == "").any():
+        invalid_rows = df[df["id"].isna() | (df["id"] == "")].index.tolist()
+        raise ValueError(
+            f"CSV validation failed: texts.csv contains empty or NaN IDs.\n\n"
+            f"Invalid rows (0-indexed): {invalid_rows}\n\n"
+            f"Please ensure all rows have non-empty ID values."
+        )
+
+    # Validate ID uniqueness
+    if df["id"].duplicated().any():
+        duplicates = df[df["id"].duplicated(keep=False)]["id"].tolist()
+        raise ValueError(
+            f"CSV validation failed: texts.csv contains duplicate IDs.\n\n"
+            f"Duplicate IDs: {', '.join(set(duplicates))}\n\n"
+            f"Please ensure all text IDs are unique."
+        )
+
+    # Normalize text field: strip whitespace and reject empty text
+    df["text"] = df["text"].str.strip()
+    if df["text"].isna().any() or (df["text"] == "").any():
+        invalid_rows = df[df["text"].isna() | (df["text"] == "")].index.tolist()
+        raise ValueError(
+            f"CSV validation failed: texts.csv contains empty or NaN text values.\n\n"
+            f"Invalid rows (0-indexed): {invalid_rows}\n\n"
+            f"Please ensure all rows have non-empty text values."
+        )
+
     return df
 
 
@@ -78,18 +138,125 @@ def read_tasks_df(path: str | Path) -> pd.DataFrame:
         pd.DataFrame: Dataframe with task rows.
 
     Raises:
-        ValueError: If required columns are missing.
+        ValueError: If required columns are missing or invalid.
         FileNotFoundError: If the file does not exist.
     """
 
-    df = pd.read_csv(path)
+    # Force all ID columns to be read as strings
+    df = pd.read_csv(path, dtype={"id": str, "id_text": str, "id_prompt": str})
     _require_columns(
         df,
         {"id", "id_text", "id_prompt", "task_type", "expected_output"},
         "tasks",
     )
-# [ ] FIX: TASK_TYPE_VALIDATION
-# Problem: task_type is not validated against an allow-list; reject unknown values.
+
+    # Normalize task ID: strip whitespace and reject empty IDs
+    df["id"] = df["id"].str.strip()
+    if df["id"].isna().any() or (df["id"] == "").any():
+        invalid_rows = df[df["id"].isna() | (df["id"] == "")].index.tolist()
+        raise ValueError(
+            f"CSV validation failed: tasks.csv contains empty or NaN task IDs.\n\n"
+            f"Invalid rows (0-indexed): {invalid_rows}\n\n"
+            f"Please ensure all rows have non-empty ID values."
+        )
+
+    # Validate task ID uniqueness
+    if df["id"].duplicated().any():
+        duplicates = df[df["id"].duplicated(keep=False)]["id"].tolist()
+        raise ValueError(
+            f"CSV validation failed: tasks.csv contains duplicate task IDs.\n\n"
+            f"Duplicate IDs: {', '.join(set(duplicates))}\n\n"
+            f"Please ensure all task IDs are unique."
+        )
+
+    # Normalize foreign key IDs: strip whitespace
+    df["id_text"] = df["id_text"].str.strip()
+    df["id_prompt"] = df["id_prompt"].str.strip()
+
+    # Validate foreign key IDs are not empty
+    if df["id_text"].isna().any() or (df["id_text"] == "").any():
+        invalid_rows = df[df["id_text"].isna() | (df["id_text"] == "")].index.tolist()
+        raise ValueError(
+            f"CSV validation failed: tasks.csv contains empty or NaN id_text values.\n\n"
+            f"Invalid rows (0-indexed): {invalid_rows}\n\n"
+            f"Please ensure all rows have valid text ID references."
+        )
+
+    if df["id_prompt"].isna().any() or (df["id_prompt"] == "").any():
+        invalid_rows = df[df["id_prompt"].isna() | (df["id_prompt"] == "")].index.tolist()
+        raise ValueError(
+            f"CSV validation failed: tasks.csv contains empty or NaN id_prompt values.\n\n"
+            f"Invalid rows (0-indexed): {invalid_rows}\n\n"
+            f"Please ensure all rows have valid prompt ID references."
+        )
+
+    # Normalize task_type: strip whitespace
+    df["task_type"] = df["task_type"].str.strip()
+
+    # Validate task_type is not empty
+    if df["task_type"].isna().any() or (df["task_type"] == "").any():
+        invalid_rows = df[df["task_type"].isna() | (df["task_type"] == "")].index.tolist()
+        raise ValueError(
+            f"CSV validation failed: tasks.csv contains empty or NaN task_type values.\n\n"
+            f"Invalid rows (0-indexed): {invalid_rows}\n\n"
+            f"Please ensure all rows have non-empty task_type values."
+        )
+
+    # Validate task_type against allow-list (case-insensitive)
+    # Common task types found in prompt engineering workflows
+    ALLOWED_TASK_TYPES = {
+        # General categories
+        "classification",
+        "generation",
+        "summarization",
+        "extraction",
+        "translation",
+        "question_answering",
+        "writing",
+        # Specific task types (from example data and common use cases)
+        "editing",
+        "comparison",
+        "evaluation",
+        "research",
+        "ops",
+        "planning",
+        "redaction",
+        "consistency",
+        "sql",
+        "math",
+        "product",
+        "analysis",
+        "formatting",
+        "validation",
+        "transformation",
+    }
+
+    # Convert to lowercase for case-insensitive comparison
+    df_types_lower = df["task_type"].str.lower()
+    invalid_types = set(df_types_lower.unique()) - ALLOWED_TASK_TYPES
+    if invalid_types:
+        # Get original case versions for better error message
+        invalid_original = df[df_types_lower.isin(invalid_types)]["task_type"].unique()
+        invalid_list = ", ".join(sorted(invalid_original))
+        allowed_list = ", ".join(sorted(ALLOWED_TASK_TYPES))
+        raise ValueError(
+            f"CSV validation failed: tasks.csv contains invalid task_type values.\n\n"
+            f"Invalid task_type values: {invalid_list}\n"
+            f"Allowed task_type values: {allowed_list}\n\n"
+            f"Please update task_type values to use one of the allowed types.\n"
+            f"If you need to use a custom task_type, it must be added to the validation list."
+        )
+
+    # Normalize expected_output: strip whitespace and reject empty values
+    df["expected_output"] = df["expected_output"].str.strip()
+    if df["expected_output"].isna().any() or (df["expected_output"] == "").any():
+        invalid_rows = df[df["expected_output"].isna() | (df["expected_output"] == "")].index.tolist()
+        raise ValueError(
+            f"CSV validation failed: tasks.csv contains empty or NaN expected_output values.\n\n"
+            f"Invalid rows (0-indexed): {invalid_rows}\n\n"
+            f"Please ensure all rows have non-empty expected output values."
+        )
+
     return df
 
 
@@ -99,6 +266,9 @@ def build_tasks_frame(
     tasks_path: str | Path,
 ) -> pd.DataFrame:
     """Merge prompts, texts, and tasks into a single dataframe.
+
+    All input validation and normalization is performed in the individual
+    read functions (read_prompts_df, read_texts_df, read_tasks_df).
 
     Args:
         prompts_path: Path to prompts CSV.
@@ -112,8 +282,8 @@ def build_tasks_frame(
         ValueError: If referenced prompt/text IDs are missing.
     """
 
-# [ ] FIX: CSV_VALIDATION_NORMALIZATION
-# Problem: Input CSVs lack token/text validation and normalization (whitespace, NaN, token fields).
+    # Read and validate individual CSVs
+    # (ID normalization, uniqueness, and required field validation happen here)
     prompts_df = read_prompts_df(prompts_path).rename(
         columns={"id": "id_prompt", "tokens": "prompt_tokens"}
     )
@@ -124,11 +294,30 @@ def build_tasks_frame(
     merged = tasks_df.merge(prompts_df, on="id_prompt", how="left", validate="many_to_one")
     if merged["prompt"].isna().any():
         missing = merged.loc[merged["prompt"].isna(), "id_prompt"].unique()
-        raise ValueError(f"Missing prompts for ids: {', '.join(map(str, missing))}")
+        missing_ids = ", ".join(map(str, missing))
+        available_prompts = ", ".join(map(str, prompts_df["id_prompt"].unique()))
+        error_msg = (
+            f"Foreign key validation failed: tasks.csv references missing prompt IDs.\n\n"
+            f"Missing prompt IDs: {missing_ids}\n"
+            f"Available prompt IDs: {available_prompts}\n\n"
+            f"Please ensure all id_prompt values in tasks.csv exist in prompts.csv.\n"
+            f"Check for typos or add the missing prompts to prompts.csv."
+        )
+        raise ValueError(error_msg)
+
     merged = merged.merge(texts_df, on="id_text", how="left", validate="many_to_one")
     if merged["text"].isna().any():
         missing = merged.loc[merged["text"].isna(), "id_text"].unique()
-        raise ValueError(f"Missing texts for ids: {', '.join(map(str, missing))}")
+        missing_ids = ", ".join(map(str, missing))
+        available_texts = ", ".join(map(str, texts_df["id_text"].unique()))
+        error_msg = (
+            f"Foreign key validation failed: tasks.csv references missing text IDs.\n\n"
+            f"Missing text IDs: {missing_ids}\n"
+            f"Available text IDs: {available_texts}\n\n"
+            f"Please ensure all id_text values in tasks.csv exist in texts.csv.\n"
+            f"Check for typos or add the missing texts to texts.csv."
+        )
+        raise ValueError(error_msg)
     return merged
 
 
@@ -243,7 +432,16 @@ def _require_columns(df: pd.DataFrame, required: set[str], label: str) -> None:
     missing = required - set(df.columns)
     if missing:
         missing_list = ", ".join(sorted(missing))
-        raise ValueError(f"{label} CSV missing required columns: {missing_list}")
+        available_cols = ", ".join(sorted(df.columns))
+        error_msg = (
+            f"CSV validation failed: {label}.csv is missing required columns.\n\n"
+            f"Missing columns: {missing_list}\n"
+            f"Available columns: {available_cols}\n"
+            f"Required columns: {', '.join(sorted(required))}\n\n"
+            f"Please ensure your CSV file includes all required columns.\n"
+            f"See docs/data-model.md for CSV format examples."
+        )
+        raise ValueError(error_msg)
 
 
 def _to_int(value: object) -> int:

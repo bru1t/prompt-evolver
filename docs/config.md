@@ -19,17 +19,39 @@ min_improvement_attempts: 2
 similarity_weight: 0.8
 length_weight: 0.2
 llm_execution:
-  mode: lmstudio
-  model: mistralai/ministral-3-3b
+  mode: lmstudio  # or: openai_compatible, echo, local
   api_url: http://127.0.0.1:1234
+  # Model name specified in run_pipeline() call
 llm_improvement:
   mode: lmstudio
-  model: mistralai/ministral-3-3b
   api_url: http://127.0.0.1:1234
 llm_evaluation:
   mode: lmstudio
-  model: mistralai/ministral-3-3b
   api_url: http://127.0.0.1:1234
+```
+
+**Model Configuration:**
+
+Model names are NOT specified in the config file. Instead, pass them as parameters when calling `run_pipeline()`:
+
+```python
+run_pipeline(
+    ...,
+    config=config,
+    execution_model="mistralai/ministral-3-3b",  # For Ollama/LM Studio
+    improvement_model="mistralai/ministral-3-3b",
+    evaluation_model="mistralai/ministral-3-3b",
+)
+```
+
+For OpenAI API, use model names like:
+```python
+run_pipeline(
+    ...,
+    execution_model="gpt-4",
+    improvement_model="gpt-4",
+    evaluation_model="gpt-3.5-turbo",
+)
 ```
 
 Presets:
@@ -55,19 +77,20 @@ max_prompt_increase_tokens: 20
 ```
 
 LLM configuration:
-- llm_execution: model used to run tasks
-- llm_improvement: model used to rewrite prompts
-- llm_evaluation: model used to evaluate outputs
+- llm_execution: backend settings for task execution
+- llm_improvement: backend settings for prompt rewriting
+- llm_evaluation: backend settings for output evaluation
 
 Each LLM config can set:
-- mode: local, lmstudio, openai_compatible
-- model: model identifier
-- api_url: base URL
-- api_key_env: environment variable name for API key
+- mode: local, lmstudio, openai_compatible (required)
+- api_url: base URL for API endpoint (required for lmstudio/openai_compatible)
+- api_key_env: environment variable name for API key (optional, for OpenAI)
 - timeout_seconds: HTTP timeout (default: 30.0)
 - max_retries: maximum retry attempts for transient errors (default: 3)
 - base_delay_seconds: initial delay before first retry (default: 1.0)
 - max_delay_seconds: maximum delay between retries (default: 30.0)
+
+**Note:** Model names are specified when calling `run_pipeline()`, not in the config file.
 
 **Retry Logic:**
 

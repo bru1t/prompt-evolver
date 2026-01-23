@@ -102,6 +102,9 @@ def run_pipeline(
     improvement_prompt_template: str,
     evaluation_prompt_template: str,
     max_generations: int | None = None,
+    execution_model: str | None = None,
+    improvement_model: str | None = None,
+    evaluation_model: str | None = None,
     execution_llm: LLMClient | None = None,
     improvement_llm: LLMClient | None = None,
     evaluation_llm: LLMClient | None = None,
@@ -119,6 +122,9 @@ def run_pipeline(
         improvement_prompt_template: Template for prompt improvement.
         evaluation_prompt_template: Template for evaluation feedback.
         max_generations: Optional override for max improvement iterations.
+        execution_model: Model name for execution LLM (overrides config).
+        improvement_model: Model name for improvement LLM (overrides config).
+        evaluation_model: Model name for evaluation LLM (overrides config).
         execution_llm: Optional execution model client.
         improvement_llm: Optional improvement model client.
         evaluation_llm: Optional evaluation model client.
@@ -134,9 +140,22 @@ def run_pipeline(
     _ensure_logging()
     logger = logging.getLogger("prompt_evolver")
     token_counter = token_counter or SimpleTokenCounter()
-    execution_llm = execution_llm or create_llm_client(config.llm_execution)
-    improvement_llm = improvement_llm or create_llm_client(config.llm_improvement)
-    evaluation_llm = evaluation_llm or create_llm_client(config.llm_evaluation)
+
+    # Create LLM configs with model overrides if provided
+    from dataclasses import replace
+    exec_config = config.llm_execution
+    if execution_model:
+        exec_config = replace(exec_config, model=execution_model)
+    improve_config = config.llm_improvement
+    if improvement_model:
+        improve_config = replace(improve_config, model=improvement_model)
+    eval_config = config.llm_evaluation
+    if evaluation_model:
+        eval_config = replace(eval_config, model=evaluation_model)
+
+    execution_llm = execution_llm or create_llm_client(exec_config)
+    improvement_llm = improvement_llm or create_llm_client(improve_config)
+    evaluation_llm = evaluation_llm or create_llm_client(eval_config)
     max_generations = max_generations if max_generations is not None else config.max_generations
     max_generations = max(max_generations, config.min_improvement_attempts)
     logger.info(
@@ -148,10 +167,17 @@ def run_pipeline(
     )
     tasks_frame = build_tasks_frame(prompts_path, texts_path, tasks_path)
     records = to_task_records(tasks_frame)
+    total_tasks = len(records)
+    logger.info(f"Processing {total_tasks} tasks...")
+
 # [ ] FIX: PARALLEL_TASK_EXECUTION
 # Problem: Pipeline executes tasks sequentially; add max_workers option with stable ordering.
-    results = [
-        evolve_task(
+    results = []
+    for idx, record in enumerate(records, 1):
+        progress_pct = int((idx / total_tasks) * 100)
+        logger.info(f"Task {idx}/{total_tasks} ({progress_pct}%) - Processing task_id={record.task_id}")
+
+        result = evolve_task(
             record,
             config=config,
             execution_prompt_template=execution_prompt_template,
@@ -164,10 +190,18 @@ def run_pipeline(
             evaluation_llm=evaluation_llm,
             token_counter=token_counter,
         )
-        for record in records
-    ]
+        results.append(result)
+
+        logger.info(
+            f"Task {idx}/{total_tasks} ({progress_pct}%) - Completed: "
+            f"iterations={result.iterations_used}, "
+            f"token_delta={result.tokens_delta:+d}, "
+            f"leakage={'YES' if result.leakage_flag else 'NO'}"
+        )
+
+    logger.info("All tasks completed. Writing results...")
     write_results_csv(output_path, results)
-    logger.info("End pipeline output=%s tasks=%d", output_path, len(results))
+    logger.info(f"Pipeline complete. Results written to: {output_path}")
     return results_to_frame(results)
 
 
